@@ -1,6 +1,6 @@
 [project]
 name = "pydanja"
-version = "0.1.0"
+version = "0.1.1"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
@@ -12,6 +12,7 @@ requires-python = ">=3.8"
 readme = "README.md"
 license = {text = "MIT"}
 repository = "https://github.com/Centurix/pydanja"
+homepage = "https://github.com/Centurix/pydanja"
 keywords = ["pydantic", "jsonapi", "json:api", "openapi", "fastapi"]
 classifiers = [
     "Development Status :: 4 - Beta",
