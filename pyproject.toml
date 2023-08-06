@@ -1,0 +1,17 @@
+[project]
+name = "pydanja"
+version = "0.1.0"
+description = "JSON:API Support for Pydantic"
+authors = [
+    {name = "Chris Read",email = "centurix@gmail.com"},
+]
+dependencies = [
+    "pydantic>=2.1.1",
+]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
