@@ -20,7 +20,9 @@ class TestType(BaseModel):
 
 
 @app.post("/", response_model_exclude_none=True)
-async def test_func(payload: DANJAResource[TestType]) -> Union[DANJAResource[TestType], DANJAError]:
+async def test_func(
+    payload: DANJAResource[TestType]
+) -> Union[DANJAResource[TestType], DANJAError]:
     """
     payload will be verified correctly for inbound JSON:API content
     The Union includes a reference to the JSON:API error object that this could throw
