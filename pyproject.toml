@@ -1,6 +1,6 @@
 [project]
 name = "pydanja"
-version = "0.1.4"
+version = "0.1.5"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},

@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from fastapi import FastAPI
 from pydanja import DANJAResource, DANJAResourceList, DANJAError
 
@@ -9,14 +9,17 @@ app = FastAPI()
 
 # Example BaseModel
 class TestType(BaseModel):
+    """Test BaseModel"""
     # If we use ID, then we must alias it to avoid clashes with Python
-    testtype_id: Optional[int] = Field(alias="id", default=None)
+    testtype_id: Optional[int] = Field(
+        alias="id",
+        default=None,
+        json_schema_extra={
+            "resource_id": True
+        }
+    )
     name: str
     description: str
-
-    class Config:
-        # Declare the resource ID field name
-        resource_id: str = "testtype_id"
 
 
 @app.post("/", response_model_exclude_none=True)
@@ -42,4 +45,4 @@ async def test_get() -> Union[DANJAResourceList[TestType], DANJAError]:
         TestType(id=3, name="Three", description="Desc Three"),
         TestType(id=4, name="Four", description="Desc Four"),
     ]
-    return DANJAResourceList.from_basemodel(values)
+    return DANJAResourceList.from_basemodel_list(values)

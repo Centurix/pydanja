@@ -1,6 +1,6 @@
 from typing import Optional
 import json
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydanja import DANJAResource, DANJAResourceList
 """
 Create basic resource containers for single and list resources
@@ -12,14 +12,16 @@ Three types of resources and their resultant JSON schema plus data.
 
 
 class TestType(BaseModel):
-    # If we use ID, then we must alias it to avoid clashes with Python
-    testtype_id: Optional[int] = Field(alias="id", default=None)
+    """Basic stuff"""
+    testtype_id: Optional[int] = Field(
+        alias="id",
+        default=None,
+        json_schema_extra={
+            "resource_id": True
+        }
+    )
     name: str
     description: str
-
-    class Config:
-        # Declare the resource ID field name
-        resource_id: str = "testtype_id"
 
 
 # From a BaseModel including ID
@@ -41,7 +43,7 @@ print(json.dumps(resource2.model_json_schema(), indent=2))
 print(resource2.model_dump_json(indent=2))
 
 # From a list of BaseModels
-resource3 = DANJAResourceList.from_basemodel([
+resource3 = DANJAResourceList.from_basemodel_list([
     TestType(id=1, name="One", description="Desc One"),
     TestType(id=2, name="Two", description="Desc Two"),
     TestType(id=3, name="Three", description="Desc Three"),

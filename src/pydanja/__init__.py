@@ -16,9 +16,7 @@ ResourceType = TypeVar("ResourceType", bound=BaseModel)
 
 
 class DANJASingleResource(BaseModel, Generic[ResourceType]):
-    """
-    A single resource. The only JSON:API required field is type
-    """
+    """A single resource. The only JSON:API required field is type"""
     id: Optional[str] = None
     type: str
     lid: Optional[str] = None
@@ -29,9 +27,7 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
 
 
 class DANJAResource(BaseModel, Generic[ResourceType]):
-    """
-    JSONAPI base for a single resource
-    """
+    """JSON:API base for a single resource"""
     data: DANJASingleResource[ResourceType]
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
@@ -60,7 +56,11 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
                 No resource ID fields supplied, look for one in the model config
                 or failing that if there's
                 """
-                resource_id = str(resource.model_config.get("resource_id"))
+                for field in resource.model_fields:
+                    if "resource_id" in resource.model_fields[field].json_schema_extra:
+                        resource_id = field
+                        break
+
                 if not resource_id:
                     raise Exception(f"No fields defined in {resource_name}")
 
@@ -82,16 +82,14 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
 
 
 class DANJAResourceList(BaseModel, Generic[ResourceType]):
-    """
-    JSONAPI base for a list of resources
-    """
+    """JSON:API base for a list of resources"""
     data: List[DANJASingleResource[ResourceType]]
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
     included: Optional[List[Dict[str, Any]]] = None
 
     @classmethod
-    def from_basemodel(
+    def from_basemodel_list(
         cls,
         resources: List[ResourceType],
         resource_name: Optional[str] = None,
@@ -116,7 +114,11 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
                     No resource ID fields supplied, look for one in the model config
                     or failing that if there's
                     """
-                    resource_id = str(resource.model_config.get("resource_id"))
+                    for field in resource.model_fields:
+                        if "resource_id" in resource.model_fields[field].json_schema_extra:
+                            resource_id = field
+                            break
+
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
             else:
@@ -151,6 +153,7 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
 
 
 class DANJALink(BaseModel):
+    """JSON:API Link"""
     href: str
     rel: Optional[str]
     describedby: Optional[str]
@@ -161,6 +164,7 @@ class DANJALink(BaseModel):
 
 
 class DANJAError(BaseModel):
+    """JSON:API Error object"""
     id: Optional[str]
     links: Optional[Dict[str, Union[str, DANJALink, None]]]
     status: Optional[str]
@@ -172,4 +176,5 @@ class DANJAError(BaseModel):
 
 
 class DANJAErrorList(BaseModel):
+    """JSON:API Error list"""
     errors: List[DANJAError]
