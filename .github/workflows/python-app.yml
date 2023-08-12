@@ -1,4 +1,4 @@
-name: Python application
+name: Library test, lint and typecheck
 
 on:
   push:

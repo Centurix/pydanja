@@ -1,3 +1,5 @@
+![build workflow](https://github.com/Centurix/pydanja/actions/workflows/python-app.yml/badge.svg)
+
 # PyDANJA
 
 [JSON:API](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
