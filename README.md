@@ -1,4 +1,6 @@
 ![build workflow](https://github.com/Centurix/pydanja/actions/workflows/python-app.yml/badge.svg)
+![pypi](https://img.shields.io/pypi/v/pydanja)
+![licence](https://img.shields.io/github/license/Centurix/pydanja.svg)
 
 # PyDANJA
 
