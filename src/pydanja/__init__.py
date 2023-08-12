@@ -56,10 +56,11 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
                 No resource ID fields supplied, look for one in the model config
                 or failing that if there's
                 """
-                for field in resource.model_fields:
-                    if "resource_id" in resource.model_fields[field].json_schema_extra:
-                        resource_id = field
-                        break
+                for field_name, field in resource.model_fields.items():
+                    if isinstance(field.json_schema_extra, dict):
+                        if "resource_id" in field.json_schema_extra:
+                            resource_id = field_name
+                            break
 
                 if not resource_id:
                     raise Exception(f"No fields defined in {resource_name}")
@@ -114,10 +115,11 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
                     No resource ID fields supplied, look for one in the model config
                     or failing that if there's
                     """
-                    for field in resource.model_fields:
-                        if "resource_id" in resource.model_fields[field].json_schema_extra:
-                            resource_id = field
-                            break
+                    for field_name, field in resource.model_fields.items():
+                        if isinstance(field.json_schema_extra, dict):
+                            if "resource_id" in field.json_schema_extra:
+                                resource_id = field_name
+                                break
 
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
