@@ -138,3 +138,21 @@ There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code
 
 * At the moment, the schema output from FastAPI includes the intermediary objects needed for the heirarchy in JSON:API, these should be suppressed
 * The type names in the API output also include the full canonical generic class names and the contained class name, this should reduce to just the contained class name
+
+### Contributing
+
+This project uses [PDM](https://pdm.fming.dev/latest/) for dependency and virtual environment management.
+
+It aims to support the lowest support Python version (3.8 as of the writing of this document)
+
+There are currently three build steps in the actions workflow:
+
+* Unit test
+* Linting
+* Type checking
+
+These can be run through PDM by using:
+
+* `pdm run lint`
+* `pdm run test`
+* `pdm run typecheck`
