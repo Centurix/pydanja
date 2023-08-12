@@ -33,6 +33,10 @@ resource1 = DANJAResource.from_basemodel(TestType(
 print(json.dumps(resource1.model_json_schema(), indent=2))
 print(resource1.model_dump_json(indent=2))
 
+# Fetch the original resource model via .resource
+original = resource1.resource
+print(original)
+
 
 # From a BaseModel without ID
 resource2 = DANJAResource.from_basemodel(TestType(
@@ -51,3 +55,7 @@ resource3 = DANJAResourceList.from_basemodel_list([
 ])
 print(json.dumps(resource3.model_json_schema(), indent=2))
 print(resource3.model_dump_json(indent=2))
+
+# Fetch the original list of resource models via .resources
+originals = resource3.resources
+print(originals)

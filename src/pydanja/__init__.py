@@ -1,5 +1,7 @@
-from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
-from pydantic import BaseModel
+from typing import Generic, TypeVar, Optional, Dict, Any, List, Union, Type
+from pydantic import BaseModel, GetCoreSchemaHandler
+from pydantic.main import BaseModel
+from pydantic_core import CoreSchema
 
 
 __all__ = [
@@ -32,6 +34,10 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
     included: Optional[List[Dict[str, Any]]] = None
+
+    @property
+    def resource(self) -> ResourceType:
+        return self.data.attributes
 
     @classmethod
     def from_basemodel(
@@ -88,6 +94,10 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
     included: Optional[List[Dict[str, Any]]] = None
+
+    @property
+    def resources(self) -> List[ResourceType]:
+        return [data.attributes for data in self.data]
 
     @classmethod
     def from_basemodel_list(

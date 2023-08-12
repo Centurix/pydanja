@@ -41,15 +41,15 @@ class TestType(BaseModel):
     description: str
 
 
-resource = DANJAResource.from_basemodel(TestType(
+resource_container = DANJAResource.from_basemodel(TestType(
     id=1,
     name="Stuff!",
     description="This is desc!"
 ))
-print(resource.model_dump_json(indent=2))
+print(resource_container.model_dump_json(indent=2))
 
 # The BaseModel contained resource can be acquired by
-contained_resource = resource.data
+resource = resource_container.resource
 ```
 
 This basic example shows a [Pydantic](https://docs.pydantic.dev/latest/) BaseModel being contained within a `DANJAResource` object. The `model_dump_json` will output [JSON:API](https://jsonapi.org/format/):
