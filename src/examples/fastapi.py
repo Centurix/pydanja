@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 from fastapi import FastAPI
 from pydanja import DANJAResource, DANJAResourceList, DANJAError
 

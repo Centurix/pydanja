@@ -1,6 +1,6 @@
 from typing import Optional
 import json
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 from pydanja import DANJAResource, DANJAResourceList
 """
 Create basic resource containers for single and list resources

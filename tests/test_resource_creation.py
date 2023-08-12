@@ -3,7 +3,7 @@ import json
 from typing import Optional
 from pathlib import Path
 from pydanja import DANJAResource, DANJAResourceList
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field
 
 
 class FixtureTestType(BaseModel):
@@ -113,7 +113,7 @@ def test_it_creates_a_container_list_from_base_model_with_id(multiple_resource_w
     # Create the JSON:API container
     resource = DANJAResourceList.from_basemodel_list(basemodel_instances)
 
-    schema = resource.model_json_schema()
+    # schema = resource.model_json_schema()
 
     # Check schema
     # assert(schema == multiple_resource_with_id)

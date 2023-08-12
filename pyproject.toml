@@ -52,3 +52,6 @@ typecheck = {cmd = "mypy .", help = "Type checking using mypy"}
 [tool.mypy]
 plugins = "pydantic.mypy"
 exclude = "examples"
+
+[tool.ruff]
+line-length = 119
