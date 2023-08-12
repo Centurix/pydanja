@@ -15,13 +15,62 @@ __all__ = [
 ResourceType = TypeVar("ResourceType", bound=BaseModel)
 
 
+class DANJALink(BaseModel):
+    """JSON:API Link"""
+    href: str
+    rel: Optional[str] = None
+    describedby: Optional[str] = None
+    title: Optional[str] = None
+    type: Optional[str] = None
+    hreflang: Optional[str] = None
+    meta: Optional[Dict[str, Any]] = None
+
+
+class DANJASource(BaseModel):
+    """JSON:API Source"""
+    pointer: str
+    parameter: str
+    header: str
+
+
+class DANJAResourceIdentifier(BaseModel):
+    """JSON:API Resource Identifier"""
+    type: str
+    id: str
+    lid: Optional[str] = None
+
+
+class DANJARelationship(BaseModel):
+    """JSON:API Relationship"""
+    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
+    data: Optional[Dict[str, Union[DANJAResourceIdentifier, List[DANJAResourceIdentifier], None]]] = None  # noqa: E501
+    meta: Optional[Dict[str, Any]] = None
+
+
+class DANJAError(BaseModel):
+    """JSON:API Error object"""
+    id: Optional[str] = None
+    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
+    status: Optional[str] = None
+    code: Optional[str] = None
+    title: Optional[str] = None
+    detail: Optional[str] = None
+    source: Optional[Dict[str, DANJASource]] = None
+    meta: Optional[Dict[str, Any]] = None
+
+
+class DANJAErrorList(BaseModel):
+    """JSON:API Error list"""
+    errors: List[DANJAError]
+
+
 class DANJASingleResource(BaseModel, Generic[ResourceType]):
     """A single resource. The only JSON:API required field is type"""
     id: Optional[str] = None
     type: str
     lid: Optional[str] = None
     attributes: ResourceType
-    relationships: Optional[Dict[str, Any]] = None
+    relationships: Optional[Dict[str, DANJARelationship]] = None
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
 
@@ -29,7 +78,7 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
 class DANJAResource(BaseModel, Generic[ResourceType]):
     """JSON:API base for a single resource"""
     data: DANJASingleResource[ResourceType]
-    links: Optional[Dict[str, Any]] = None
+    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
     meta: Optional[Dict[str, Any]] = None
     included: Optional[List[Dict[str, Any]]] = None
 
@@ -89,7 +138,7 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
 class DANJAResourceList(BaseModel, Generic[ResourceType]):
     """JSON:API base for a list of resources"""
     data: List[DANJASingleResource[ResourceType]]
-    links: Optional[Dict[str, Any]] = None
+    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
     meta: Optional[Dict[str, Any]] = None
     included: Optional[List[Dict[str, Any]]] = None
 
@@ -160,31 +209,3 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
-
-
-class DANJALink(BaseModel):
-    """JSON:API Link"""
-    href: str
-    rel: Optional[str]
-    describedby: Optional[str]
-    title: Optional[str]
-    type: Optional[str]
-    hreflang: Optional[str]
-    meta: Optional[Dict[str, Any]]
-
-
-class DANJAError(BaseModel):
-    """JSON:API Error object"""
-    id: Optional[str]
-    links: Optional[Dict[str, Union[str, DANJALink, None]]]
-    status: Optional[str]
-    code: Optional[str]
-    title: Optional[str]
-    detail: Optional[str]
-    source: Optional[Dict[str, Any]]
-    meta: Optional[Dict[str, Any]]
-
-
-class DANJAErrorList(BaseModel):
-    """JSON:API Error list"""
-    errors: List[DANJAError]

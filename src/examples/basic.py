@@ -1,7 +1,11 @@
 from typing import Optional
 import json
 from pydantic import BaseModel, Field
-from pydanja import DANJAResource, DANJAResourceList
+from pydanja import (
+    DANJAResource,
+    DANJAResourceList,
+    DANJALink
+)
 """
 Create basic resource containers for single and list resources
 
@@ -30,6 +34,9 @@ resource1 = DANJAResource.from_basemodel(TestType(
     name="Stuff!",
     description="This is desc!"
 ))
+resource1.links = {
+    "self": DANJALink(href="http://localhost")
+}
 print(json.dumps(resource1.model_json_schema(), indent=2))
 print(resource1.model_dump_json(indent=2))
 
