@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 __all__ = [
@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-ResourceType = TypeVar("ResourceType")
+ResourceType = TypeVar("ResourceType", bound=BaseModel)
 
 
 class DANJASingleResource(BaseModel, Generic[ResourceType]):
@@ -50,17 +50,17 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
                 No resource name supplied, look for one in the model config
                 or failing that use the resource class name
                 """
-                resource_name = resource.model_config.get(
+                resource_name = str(resource.model_config.get(
                     "resource_name",
                     resource.__class__.__name__.lower()
-                )
+                ))
 
             if not resource_id:
                 """
                 No resource ID fields supplied, look for one in the model config
                 or failing that if there's
                 """
-                resource_id = resource.model_config.get("resource_id")
+                resource_id = str(resource.model_config.get("resource_id"))
                 if not resource_id:
                     raise Exception(f"No fields defined in {resource_name}")
 
@@ -74,10 +74,8 @@ class DANJAResource(BaseModel, Generic[ResourceType]):
             if id_value:
                 values["id"] = str(id_value)
 
-            single_resource = DANJASingleResource(**values)
-
-            return cls(data=single_resource)
-        except AttributeError as ae:
+            return cls(data=DANJASingleResource(**values))
+        except AttributeError:
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
@@ -98,7 +96,7 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
         resources: List[ResourceType],
         resource_name: Optional[str] = None,
         resource_id: Optional[str] = None
-    ) -> "DANJAResource":
+    ) -> "DANJAResourceList":
         try:
             if len(resources) > 0:
                 resource = resources[0]
@@ -108,28 +106,32 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
                     No resource name supplied, look for one in the model config
                     or failing that use the resource class name
                     """
-                    resource_name = resource.model_config.get(
+                    resource_name = str(resource.model_config.get(
                         "resource_name",
                         resource.__class__.__name__.lower()
-                    )
+                    ))
 
                 if not resource_id:
                     """
                     No resource ID fields supplied, look for one in the model config
                     or failing that if there's
                     """
-                    resource_id = resource.model_config.get("resource_id")
+                    resource_id = str(resource.model_config.get("resource_id"))
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
             else:
                 # If there's no resources to examine, the ID and name must be supplied
                 if not resource_name:
-                    raise Exception(f"No resources included, cannot derive the resource name")
+                    raise Exception(
+                        "No resources included, cannot derive the resource name"
+                    )
 
                 if not resource_id:
-                    raise Exception(f"No resources included, cannot derive the resournce ID")
+                    raise Exception(
+                        "No resources included, cannot derive the resournce ID"
+                    )
 
-            data = []
+            data: List[DANJASingleResource] = []
             for resource in resources:
                 values = {
                     "type": resource_name,
@@ -142,7 +144,7 @@ class DANJAResourceList(BaseModel, Generic[ResourceType]):
                 data.append(DANJASingleResource(**values))
 
             return cls(data=data)
-        except AttributeError as ae:
+        except AttributeError:
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
