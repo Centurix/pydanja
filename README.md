@@ -143,7 +143,7 @@ There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code
 
 This project uses [PDM](https://pdm.fming.dev/latest/) for dependency and virtual environment management.
 
-It aims to support the lowest support Python version (3.8 as of the writing of this document)
+It aims to use the lowest supported Python version (3.8 as of the writing of this document)
 
 There are currently three build steps in the actions workflow:
 
