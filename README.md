@@ -2,7 +2,7 @@
 
 # PyDANJA
 
-[JSON:API](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
+[JSON:API (or JSONAPI)](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
 
 This is a series of classes that can be included into your [Pydantic](https://docs.pydantic.dev/latest/) project that act as a container format for outputting and verifying [JSON:API](https://jsonapi.org/format/) compliant content.
 
