@@ -1,7 +1,5 @@
-from typing import Generic, TypeVar, Optional, Dict, Any, List, Union, Type
-from pydantic import BaseModel, GetCoreSchemaHandler
-from pydantic.main import BaseModel
-from pydantic_core import CoreSchema
+from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
+from pydantic import BaseModel
 
 
 __all__ = [
