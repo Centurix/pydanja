@@ -159,3 +159,5 @@ cython_debug/
 
 # Lock files
 pdm.lock
+
+.ruff_cache/
