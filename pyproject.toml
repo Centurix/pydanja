@@ -34,3 +34,21 @@ repository = "https://github.com/Centurix/pydanja"
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool]
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.0.284",
+    "mypy>=1.5.0",
+]
+
+[tool.pdm.scripts]
+lint = {cmd = "ruff .", help = "Linting using Ruff"}
+test = {cmd = "pytest .", help = "Unit testing using pytest"}
+typecheck = {cmd = "mypy .", help = "Type checking using mypy"}
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+exclude = "examples"
