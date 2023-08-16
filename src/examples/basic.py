@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, TypeVar, Generic
 import json
 from pydantic import BaseModel, Field
 from pydanja import (

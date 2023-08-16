@@ -28,36 +28,36 @@ def resource(request):
         return json.load(json_fixture)
 
 
-@pytest.fixture
-def single_resource_with_id():
-    with open(
-        Path("tests", "fixtures", "single_resource_with_id.json"), "r"
-    ) as json_fixture:
-        return json.load(json_fixture)
+# @pytest.fixture
+# def single_resource_with_id():
+#     with open(
+#         Path("tests", "fixtures", "single_resource_with_id.json"), "r"
+#     ) as json_fixture:
+#         return json.load(json_fixture)
 
 
-@pytest.fixture
-def single_resource_without_id():
-    with open(
-        Path("tests", "fixtures", "single_resource_without_id.json"), "r"
-    ) as json_fixture:
-        return json.load(json_fixture)
+# @pytest.fixture
+# def single_resource_without_id():
+#     with open(
+#         Path("tests", "fixtures", "single_resource_without_id.json"), "r"
+#     ) as json_fixture:
+#         return json.load(json_fixture)
 
 
-@pytest.fixture
-def multiple_resource_with_id():
-    with open(
-        Path("tests", "fixtures", "multiple_resource_with_id.json"), "r"
-    ) as json_fixture:
-        return json.load(json_fixture)
+# @pytest.fixture
+# def multiple_resource_with_id():
+#     with open(
+#         Path("tests", "fixtures", "multiple_resource_with_id.json"), "r"
+#     ) as json_fixture:
+#         return json.load(json_fixture)
 
 
-@pytest.fixture
-def multiple_resource_without_id():
-    with open(
-        Path("tests", "fixtures", "multiple_resource_without_id.json"), "r"
-    ) as json_fixture:
-        return json.load(json_fixture)
+# @pytest.fixture
+# def multiple_resource_without_id():
+#     with open(
+#         Path("tests", "fixtures", "multiple_resource_without_id.json"), "r"
+#     ) as json_fixture:
+#         return json.load(json_fixture)
 
 
 @pytest.mark.parametrize("resource", ["single_resource_with_id.json"], indirect=True)
