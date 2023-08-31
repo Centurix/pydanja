@@ -2,6 +2,7 @@
 ![pypi](https://img.shields.io/pypi/v/pydanja)
 ![licence](https://img.shields.io/github/license/Centurix/pydanja.svg)
 ![status](https://img.shields.io/pypi/status/pydanja)
+![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)(https://pdm.fming.dev)
 
 # PyDANJA
 
