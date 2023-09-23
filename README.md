@@ -11,6 +11,8 @@
 
 [JSON:API (or JSONAPI)](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
 
+Output [JSONAPI](https://jsonapi.org/format/) from your [FastAPI](https://fastapi.tiangolo.com/) or [PyDantic](https://docs.pydantic.dev/latest/) based application with very little code.
+
 This is a series of classes that can be included into your [Pydantic](https://docs.pydantic.dev/latest/) project that act as a container format for outputting and verifying [JSON:API](https://jsonapi.org/format/) compliant content.
 
 This library makes use of BaseModel generics to contain either a single resource or a list of resources as further BaseModels.
