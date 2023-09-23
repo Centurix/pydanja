@@ -6,7 +6,7 @@
 
 # PyDANJA
 
-**PyDAN**tic **J**SON**A**PI
+**PyDAN**~tic~ **J**~SON~**A**~PI~
 
 
 [JSON:API (or JSONAPI)](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
