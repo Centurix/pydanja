@@ -1,12 +1,13 @@
 [project]
 name = "pydanja"
-version = "0.1.13"
+version = "0.1.14"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
 ]
 dependencies = [
     "pydantic>=2.1.1",
+    "dpath>=2.1.6",
 ]
 requires-python = ">=3.8"
 readme = "README.md"

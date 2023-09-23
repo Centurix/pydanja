@@ -83,10 +83,32 @@ Note that all [JSON:API](https://jsonapi.org/format/) fields are included in the
 from typing import Optional, Union
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi import FastAPI
-from pydanja import DANJAResource, DANJAResourceList, DANJAError
+from pydanja import DANJAResource, DANJAResourceList, DANJAError, danja_openapi
+from fastapi.openapi.utils import get_openapi
 
 
 app = FastAPI()
+
+
+# Optional: Clear up the OpenAPI documentation by de-cluttering schema
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    openapi_schema = get_openapi(
+        title="FastAPI",
+        version="2.5.0",
+        summary="FastAPI",
+        description="FastAPI",
+        routes=app.routes,
+    )
+
+    app.openapi_schema = danja_openapi(openapi_schema)
+
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
 
 
 # Example BaseModel

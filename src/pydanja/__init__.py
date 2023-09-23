@@ -1,5 +1,6 @@
 from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
 from pydantic import BaseModel
+from .openapi import danja_openapi
 
 
 __all__ = [
@@ -8,7 +9,8 @@ __all__ = [
     "DANJAResourceList",
     "DANJALink",
     "DANJAError",
-    "DANJAErrorList"
+    "DANJAErrorList",
+    "danja_openapi"
 ]
 
 
