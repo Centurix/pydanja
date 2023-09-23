@@ -165,11 +165,6 @@ This library supports:
 There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code in the `src/examples` directory.
 
 
-### Future Enhancements
-
-* At the moment, the schema output from FastAPI includes the intermediary objects needed for the heirarchy in JSON:API, these should be suppressed
-* The type names in the API output also include the full canonical generic class names and the contained class name, this should reduce to just the contained class name
-
 ### Contributing
 
 This project uses [PDM](https://pdm.fming.dev/latest/) for dependency and virtual environment management.
