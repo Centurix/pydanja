@@ -1,6 +1,6 @@
 [project]
 name = "pydanja"
-version = "0.1.16"
+version = "0.1.17"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
@@ -31,6 +31,7 @@ classifiers = [
 [project.urls]
 homepage = "https://github.com/Centurix/pydanja"
 repository = "https://github.com/Centurix/pydanja"
+documentation = "https://pydanja.readthedocs.io/en/latest/"
 
 [build-system]
 requires = ["pdm-backend"]
