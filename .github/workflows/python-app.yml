@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   build:
@@ -33,9 +32,3 @@ jobs:
     - name: Typecheck with mypy
       run: |
         pdm run typecheck
-  build-docs:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: readthedocs/actions/preview@v1
-      with:
-        project-slug: "pydanja"
