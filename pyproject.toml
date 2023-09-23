@@ -1,6 +1,6 @@
 [project]
 name = "pydanja"
-version = "0.1.15"
+version = "0.1.16"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
@@ -43,6 +43,7 @@ dev = [
     "pytest>=7.4.0",
     "ruff>=0.0.284",
     "mypy>=1.5.0",
+    "sphinx>=7.1.2",
 ]
 
 [tool.pdm.scripts]
