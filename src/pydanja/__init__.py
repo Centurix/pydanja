@@ -1,7 +1,7 @@
-from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
 from pydantic import BaseModel
-from .openapi import danja_openapi
+from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
 
+from .openapi import danja_openapi
 
 __all__ = [
     "DANJASingleResource",
@@ -12,7 +12,6 @@ __all__ = [
     "DANJAErrorList",
     "danja_openapi"
 ]
-
 
 ResourceType = TypeVar("ResourceType")
 
@@ -95,7 +94,6 @@ class ResourceResolver():
         return None
 
 
-
 class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
     """JSON:API base for a single resource"""
     data: DANJASingleResource[ResourceType]
@@ -109,10 +107,10 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
 
     @classmethod
     def from_basemodel(
-        cls,
-        resource: ResourceType,
-        resource_name: Optional[str] = None,
-        resource_id: Optional[str] = None
+            cls,
+            resource: ResourceType,
+            resource_name: Optional[str] = None,
+            resource_id: Optional[str] = None
     ) -> "DANJAResource":
         try:
             if not resource_name:
@@ -161,10 +159,10 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
 
     @classmethod
     def from_basemodel_list(
-        cls,
-        resources: List[ResourceType],
-        resource_name: Optional[str] = None,
-        resource_id: Optional[str] = None
+            cls,
+            resources: List[ResourceType],
+            resource_name: Optional[str] = None,
+            resource_id: Optional[str] = None
     ) -> "DANJAResourceList":
         try:
             if len(resources) > 0:
@@ -185,17 +183,6 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     resource_id = cls.resolve_resource_id(resource)
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
-            else:
-                # If there's no resources to examine, the ID and name must be supplied
-                if not resource_name:
-                    raise Exception(
-                        "No resources included, cannot derive the resource name"
-                    )
-
-                if not resource_id:
-                    raise Exception(
-                        "No resources included, cannot derive the resournce ID"
-                    )
 
             data: List[DANJASingleResource] = []
             for sub_resource in resources:
