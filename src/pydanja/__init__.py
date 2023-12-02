@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
+
+from pydantic import BaseModel
 
 from .openapi import danja_openapi
 
@@ -14,6 +15,24 @@ __all__ = [
 ]
 
 ResourceType = TypeVar("ResourceType")
+
+
+class ResourceResolver():
+    @classmethod
+    def resolve_resource_name(cls, resource) -> str:
+        return str(resource.model_config.get(
+            "resource_name",
+            resource.__class__.__name__.lower()
+        ))
+
+    @classmethod
+    def resolve_resource_id(cls, resource) -> Optional[str]:
+        for field_name, field in resource.model_fields.items():
+            if isinstance(field.json_schema_extra, dict):
+                if "resource_id" in field.json_schema_extra:
+                    return field_name
+
+        return None
 
 
 class DANJALink(BaseModel):
@@ -40,12 +59,54 @@ class DANJAResourceIdentifier(BaseModel):
     id: str
     lid: Optional[str] = None
 
+    @classmethod
+    def from_danjaresource(
+            cls,
+            resource: "DANJAResource",
+    ) -> "DANJARelationship":
+        values = {
+            "type": resource.data.type,
+            "id": resource.data.id,
+        }
 
-class DANJARelationship(BaseModel):
+        return DANJAResourceIdentifier(**values)
+
+
+class DANJARelationship(BaseModel, ResourceResolver):
     """JSON:API Relationship"""
     links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
-    data: Optional[Dict[str, Union[DANJAResourceIdentifier, List[DANJAResourceIdentifier], None]]] = None  # noqa: E501
+    data: DANJAResourceIdentifier
     meta: Optional[Dict[str, Any]] = None
+
+    @classmethod
+    def from_basemodel(
+            cls,
+            resource: ResourceType,
+    ) -> "DANJARelationship":
+        try:
+            resource_name = cls.resolve_resource_name(resource)
+            resource_id = cls.resolve_resource_id(resource)
+            if not resource_id:
+                raise Exception(f"No fields defined in {resource_name}")
+
+            values = {
+                "type": resource_name,
+                "id": str(object.__getattribute__(resource, resource_id)),
+            }
+
+            return DANJARelationship(data=DANJAResourceIdentifier(**values))
+        except AttributeError:
+            raise Exception(
+                f"Resource ID field not found in {resource_name}: {resource_id}"
+            )
+
+    @classmethod
+    def from_danjaresource(
+            cls,
+            resource: "DANJAResource",
+    ) -> "DANJARelationship":
+        identifier = DANJAResourceIdentifier.from_danjaresource(resource)
+        return DANJARelationship(data=identifier)
 
 
 class DANJAError(BaseModel):
@@ -74,24 +135,6 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
     relationships: Optional[Dict[str, DANJARelationship]] = None
     links: Optional[Dict[str, Any]] = None
     meta: Optional[Dict[str, Any]] = None
-
-
-class ResourceResolver():
-    @classmethod
-    def resolve_resource_name(cls, resource) -> str:
-        return str(resource.model_config.get(
-            "resource_name",
-            resource.__class__.__name__.lower()
-        ))
-
-    @classmethod
-    def resolve_resource_id(cls, resource) -> Optional[str]:
-        for field_name, field in resource.model_fields.items():
-            if isinstance(field.json_schema_extra, dict):
-                if "resource_id" in field.json_schema_extra:
-                    return field_name
-
-        return None
 
 
 class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):

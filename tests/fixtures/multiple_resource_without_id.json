@@ -115,32 +115,7 @@
                     "title": "Links"
                 },
                 "data": {
-                    "anyOf": [
-                        {
-                            "additionalProperties": {
-                                "anyOf": [
-                                    {
-                                        "$ref": "#/$defs/DANJAResourceIdentifier"
-                                    },
-                                    {
-                                        "items": {
-                                            "$ref": "#/$defs/DANJAResourceIdentifier"
-                                        },
-                                        "type": "array"
-                                    },
-                                    {
-                                        "type": "null"
-                                    }
-                                ]
-                            },
-                            "type": "object"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "title": "Data"
+                    "$ref": "#/$defs/DANJAResourceIdentifier"
                 },
                 "meta": {
                     "anyOf": [
@@ -155,6 +130,9 @@
                     "title": "Meta"
                 }
             },
+            "required": [
+                "data"
+            ],
             "title": "DANJARelationship",
             "type": "object"
         },
