@@ -58,6 +58,3 @@ exclude = "examples"
 
 [tool.ruff]
 line-length = 119
-
-[tool.flit.sdist]
-exclude = [".idea", "Makefile"]

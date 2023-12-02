@@ -151,7 +151,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
     data: List[DANJASingleResource[ResourceType]]
     links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
     meta: Optional[Dict[str, Any]] = None
-    included: Optional[List[Dict[str, Any]]] = None
+    included: Optional[List[DANJASingleResource]] = None
 
     @property
     def resources(self) -> List[ResourceType]:
