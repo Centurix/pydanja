@@ -227,17 +227,19 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
 
-            data: List[DANJASingleResource] = []
-            for sub_resource in resources:
-                values = {
-                    "type": resource_name,
-                    "lid": None,
-                    "attributes": sub_resource
-                }
-                id_value = object.__getattribute__(sub_resource, resource_id)
-                if id_value:
-                    values["id"] = str(id_value)
-                data.append(DANJASingleResource(**values))
+                data: List[DANJASingleResource] = []
+                for sub_resource in resources:
+                    values = {
+                        "type": resource_name,
+                        "lid": None,
+                        "attributes": sub_resource
+                    }
+                    id_value = object.__getattribute__(sub_resource, resource_id)
+                    if id_value:
+                        values["id"] = str(id_value)
+                    data.append(DANJASingleResource(**values))
+            else:
+                data = []
 
             return cls(data=data)
         except AttributeError:
