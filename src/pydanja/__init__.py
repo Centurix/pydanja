@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from .openapi import danja_openapi
 
 __all__ = [
-    "DANJASingleResource",
+    "DANJAResource",
     "DANJAResource",
     "DANJAResourceList",
     "DANJALink",
@@ -65,8 +65,8 @@ class DANJAResourceIdentifier(BaseModel):
             resource: "DANJAResource",
     ) -> "DANJAResourceIdentifier":
         values = {
-            "type": resource.data.type,
-            "id": resource.data.id,
+            "type": resource.type,
+            "id": resource.id,
         }
 
         return DANJAResourceIdentifier(**values)
@@ -126,7 +126,7 @@ class DANJAErrorList(BaseModel):
     errors: List[DANJAError]
 
 
-class DANJASingleResource(BaseModel, Generic[ResourceType]):
+class DANJAResource(BaseModel, Generic[ResourceType]):
     """A single resource. The only JSON:API required field is type"""
     id: Optional[str] = None
     type: str
@@ -137,15 +137,17 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
     meta: Optional[Dict[str, Any]] = None
 
 
-class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
-    """JSON:API base for a single resource"""
-    data: DANJASingleResource[ResourceType]
+class DANJATopLevel(BaseModel, ResourceResolver, Generic[ResourceType]):
+    """JSON:API base for a top level resource"""
+    data: Union[DANJAResource[ResourceType], List[DANJAResource[ResourceType]]]
     links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
     meta: Optional[Dict[str, Any]] = None
-    included: Optional[List[Dict[str, Any]]] = None
+    included: Optional[List[DANJAResource[ResourceType]]] = None
 
     @property
-    def resource(self) -> ResourceType:
+    def resource(self) -> Union[ResourceType, List[ResourceType]]:
+        if isinstance(self.data, List):
+            return [data.attributes for data in self.data]
         return self.data.attributes
 
     @classmethod
@@ -154,7 +156,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
             resource: ResourceType,
             resource_name: Optional[str] = None,
             resource_id: Optional[str] = None
-    ) -> "DANJAResource":
+    ) -> "DANJATopLevel":
         try:
             if not resource_name:
                 """
@@ -182,23 +184,11 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
             if id_value:
                 values["id"] = str(id_value)
 
-            return cls(data=DANJASingleResource(**values))
+            return cls(data=DANJAResource(**values))
         except AttributeError:
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
-
-
-class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
-    """JSON:API base for a list of resources"""
-    data: List[DANJASingleResource[ResourceType]]
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
-    meta: Optional[Dict[str, Any]] = None
-    included: Optional[List[DANJASingleResource]] = None
-
-    @property
-    def resources(self) -> List[ResourceType]:
-        return [data.attributes for data in self.data]
 
     @classmethod
     def from_basemodel_list(
@@ -206,7 +196,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
             resources: List[ResourceType],
             resource_name: Optional[str] = None,
             resource_id: Optional[str] = None
-    ) -> "DANJAResourceList":
+    ) -> "DANJATopLevel":
         try:
             if len(resources) > 0:
                 resource = resources[0]
@@ -227,7 +217,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
 
-                data: List[DANJASingleResource] = []
+                data: List[DANJAResource] = []
                 for sub_resource in resources:
                     values = {
                         "type": resource_name,
@@ -237,7 +227,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     id_value = object.__getattribute__(sub_resource, resource_id)
                     if id_value:
                         values["id"] = str(id_value)
-                    data.append(DANJASingleResource(**values))
+                    data.append(DANJAResource(**values))
             else:
                 data = []
 

@@ -167,7 +167,7 @@
             "title": "DANJAResourceIdentifier",
             "type": "object"
         },
-        "DANJASingleResource": {
+        "DANJAResource": {
             "description": "A single resource. The only JSON:API required field is type",
             "properties": {
                 "id": {
@@ -245,14 +245,25 @@
                 "type",
                 "attributes"
             ],
-            "title": "DANJASingleResource",
+            "title": "DANJAResource",
             "type": "object"
         }
     },
-    "description": "JSON:API base for a single resource",
+    "description": "JSON:API base for a top level resource",
     "properties": {
         "data": {
-            "$ref": "#/$defs/DANJASingleResource"
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DANJAResource"
+                },
+                {
+                    "items": {
+                        "$ref": "#/$defs/DANJAResource"
+                    },
+                    "type": "array"
+                }
+            ],
+            "title": "Data"
         },
         "links": {
             "anyOf": [
@@ -295,7 +306,7 @@
             "anyOf": [
                 {
                     "items": {
-                        "type": "object"
+                        "$ref": "#/$defs/DANJAResource"
                     },
                     "type": "array"
                 },
@@ -310,6 +321,6 @@
     "required": [
         "data"
     ],
-    "title": "DANJAResource",
+    "title": "DANJATopLevel",
     "type": "object"
 }

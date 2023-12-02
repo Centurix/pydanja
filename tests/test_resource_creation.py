@@ -2,7 +2,7 @@ import pytest
 import json
 from typing import Optional
 from pathlib import Path
-from pydanja import DANJAResource, DANJAResourceList
+from pydanja import DANJAResource, DANJATopLevel
 from pydantic import BaseModel, Field
 
 
@@ -42,7 +42,7 @@ def test_it_creates_a_container_from_base_model_with_id(resource):
     )
 
     # Create the JSON:API container
-    new_resource = DANJAResource.from_basemodel(basemodel_instance)
+    new_resource = DANJATopLevel.from_basemodel(basemodel_instance)
 
     schema = new_resource.model_json_schema()
 
@@ -66,7 +66,7 @@ def test_it_creates_a_container_from_base_model_without_id(resource):
     )
 
     # Create the JSON:API container
-    new_resource = DANJAResource.from_basemodel(basemodel_instance)
+    new_resource = DANJATopLevel.from_basemodel(basemodel_instance)
 
     schema = new_resource.model_json_schema()
 
@@ -98,7 +98,7 @@ def test_it_creates_a_container_list_from_base_model_with_id(resource):
     ]
 
     # Create the JSON:API container
-    new_resources = DANJAResourceList.from_basemodel_list(basemodel_instances)
+    new_resources = DANJATopLevel.from_basemodel_list(basemodel_instances)
 
     schema = new_resources.model_json_schema()
 
@@ -106,7 +106,7 @@ def test_it_creates_a_container_list_from_base_model_with_id(resource):
     assert(schema == resource)
 
     # Check resource data
-    assert(len(new_resources.resources) == len(basemodel_instances))
+    assert(len(new_resources.resource) == len(basemodel_instances))
 
 
 @pytest.mark.parametrize("resource", ["multiple_resource_without_id.json"], indirect=True)
@@ -128,7 +128,7 @@ def test_it_creates_a_container_list_from_base_model_without_id(resource):
     ]
 
     # Create the JSON:API container
-    new_resources = DANJAResourceList.from_basemodel_list(basemodel_instances)
+    new_resources = DANJATopLevel.from_basemodel_list(basemodel_instances)
 
     schema = new_resources.model_json_schema()
 
@@ -136,4 +136,4 @@ def test_it_creates_a_container_list_from_base_model_without_id(resource):
     assert(schema == resource)
 
     # Check resource data
-    assert(len(new_resources.resources) == len(basemodel_instances))
+    assert(len(new_resources.resource) == len(basemodel_instances))
