@@ -63,7 +63,7 @@ class DANJAResourceIdentifier(BaseModel):
     def from_danjaresource(
             cls,
             resource: "DANJAResource",
-    ) -> "DANJARelationship":
+    ) -> "DANJAResourceIdentifier":
         values = {
             "type": resource.data.type,
             "id": resource.data.id,
