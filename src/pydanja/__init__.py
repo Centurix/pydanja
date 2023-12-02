@@ -1,6 +1,7 @@
 from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
 
 from pydantic import BaseModel
+from pydantic.networks import AnyUrl
 
 from .openapi import danja_openapi
 
@@ -37,7 +38,7 @@ class ResourceResolver():
 
 class DANJALink(BaseModel):
     """JSON:API Link"""
-    href: str
+    href: Union[str, AnyUrl]
     rel: Optional[str] = None
     describedby: Optional[str] = None
     title: Optional[str] = None
@@ -74,7 +75,7 @@ class DANJAResourceIdentifier(BaseModel):
 
 class DANJARelationship(BaseModel, ResourceResolver):
     """JSON:API Relationship"""
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
+    links: Optional[Dict[str, Union[str, AnyUrl, DANJALink, None]]] = None
     data: DANJAResourceIdentifier
     meta: Optional[Dict[str, Any]] = None
 

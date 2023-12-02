@@ -4,8 +4,17 @@
             "description": "JSON:API Link",
             "properties": {
                 "href": {
-                    "title": "Href",
-                    "type": "string"
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "format": "uri",
+                            "minLength": 1,
+                            "type": "string"
+                        }
+                    ],
+                    "title": "Href"
                 },
                 "rel": {
                     "anyOf": [
@@ -95,6 +104,11 @@
                             "additionalProperties": {
                                 "anyOf": [
                                     {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "format": "uri",
+                                        "minLength": 1,
                                         "type": "string"
                                     },
                                     {
