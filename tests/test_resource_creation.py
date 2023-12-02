@@ -1,9 +1,11 @@
-import pytest
 import json
-from typing import Optional
 from pathlib import Path
-from pydanja import DANJAResource, DANJATopLevel
+from typing import Optional
+
+import pytest
 from pydantic import BaseModel, Field
+
+from pydanja import DANJATopLevel
 
 
 class FixtureTestType(BaseModel):
@@ -47,10 +49,10 @@ def test_it_creates_a_container_from_base_model_with_id(resource):
     schema = new_resource.model_json_schema()
 
     # Check schema
-    assert(schema == resource)
+    assert (schema == resource)
 
     # Check resource data
-    assert(new_resource.resource == basemodel_instance)
+    assert (new_resource.resource == basemodel_instance)
 
 
 @pytest.mark.parametrize("resource", ["single_resource_without_id.json"], indirect=True)
@@ -71,10 +73,10 @@ def test_it_creates_a_container_from_base_model_without_id(resource):
     schema = new_resource.model_json_schema()
 
     # Check schema
-    assert(schema == resource)
+    assert (schema == resource)
 
     # Check resource data
-    assert(new_resource.resource == basemodel_instance)
+    assert (new_resource.resource == basemodel_instance)
 
 
 @pytest.mark.parametrize("resource", ["multiple_resource_with_id.json"], indirect=True)
@@ -103,10 +105,10 @@ def test_it_creates_a_container_list_from_base_model_with_id(resource):
     schema = new_resources.model_json_schema()
 
     # Check schema
-    assert(schema == resource)
+    assert (schema == resource)
 
     # Check resource data
-    assert(len(new_resources.resource) == len(basemodel_instances))
+    assert (len(new_resources.resource) == len(basemodel_instances))
 
 
 @pytest.mark.parametrize("resource", ["multiple_resource_without_id.json"], indirect=True)
@@ -133,7 +135,7 @@ def test_it_creates_a_container_list_from_base_model_without_id(resource):
     schema = new_resources.model_json_schema()
 
     # Check schema
-    assert(schema == resource)
+    assert (schema == resource)
 
     # Check resource data
-    assert(len(new_resources.resource) == len(basemodel_instances))
+    assert (len(new_resources.resource) == len(basemodel_instances))
