@@ -321,7 +321,7 @@
             "anyOf": [
                 {
                     "items": {
-                        "type": "object"
+                        "$ref": "#/$defs/DANJASingleResource"
                     },
                     "type": "array"
                 },
