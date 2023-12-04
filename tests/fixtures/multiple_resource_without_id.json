@@ -4,8 +4,17 @@
             "description": "JSON:API Link",
             "properties": {
                 "href": {
-                    "title": "Href",
-                    "type": "string"
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "format": "uri",
+                            "minLength": 1,
+                            "type": "string"
+                        }
+                    ],
+                    "title": "Href"
                 },
                 "rel": {
                     "anyOf": [
@@ -98,6 +107,11 @@
                                         "type": "string"
                                     },
                                     {
+                                        "format": "uri",
+                                        "minLength": 1,
+                                        "type": "string"
+                                    },
+                                    {
                                         "$ref": "#/$defs/DANJALink"
                                     },
                                     {
@@ -115,32 +129,7 @@
                     "title": "Links"
                 },
                 "data": {
-                    "anyOf": [
-                        {
-                            "additionalProperties": {
-                                "anyOf": [
-                                    {
-                                        "$ref": "#/$defs/DANJAResourceIdentifier"
-                                    },
-                                    {
-                                        "items": {
-                                            "$ref": "#/$defs/DANJAResourceIdentifier"
-                                        },
-                                        "type": "array"
-                                    },
-                                    {
-                                        "type": "null"
-                                    }
-                                ]
-                            },
-                            "type": "object"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "title": "Data"
+                    "$ref": "#/$defs/DANJAResourceIdentifier"
                 },
                 "meta": {
                     "anyOf": [
@@ -155,6 +144,9 @@
                     "title": "Meta"
                 }
             },
+            "required": [
+                "data"
+            ],
             "title": "DANJARelationship",
             "type": "object"
         },
@@ -189,7 +181,7 @@
             "title": "DANJAResourceIdentifier",
             "type": "object"
         },
-        "DANJASingleResource": {
+        "DANJAResource": {
             "description": "A single resource. The only JSON:API required field is type",
             "properties": {
                 "id": {
@@ -267,18 +259,25 @@
                 "type",
                 "attributes"
             ],
-            "title": "DANJASingleResource",
+            "title": "DANJAResource",
             "type": "object"
         }
     },
-    "description": "JSON:API base for a list of resources",
+    "description": "JSON:API base for a top level resource",
     "properties": {
         "data": {
-            "items": {
-                "$ref": "#/$defs/DANJASingleResource"
-            },
-            "title": "Data",
-            "type": "array"
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DANJAResource"
+                },
+                {
+                    "items": {
+                        "$ref": "#/$defs/DANJAResource"
+                    },
+                    "type": "array"
+                }
+            ],
+            "title": "Data"
         },
         "links": {
             "anyOf": [
@@ -321,7 +320,7 @@
             "anyOf": [
                 {
                     "items": {
-                        "$ref": "#/$defs/DANJASingleResource"
+                        "$ref": "#/$defs/DANJAResource"
                     },
                     "type": "array"
                 },
@@ -336,6 +335,6 @@
     "required": [
         "data"
     ],
-    "title": "DANJAResourceList",
+    "title": "DANJATopLevel",
     "type": "object"
 }
