@@ -6,9 +6,8 @@ from pydantic.networks import AnyUrl
 from .openapi import danja_openapi
 
 __all__ = [
+    "DANJATopLevel",
     "DANJAResource",
-    "DANJAResource",
-    "DANJAResourceList",
     "DANJALink",
     "DANJAError",
     "DANJAErrorList",
@@ -63,11 +62,11 @@ class DANJAResourceIdentifier(BaseModel):
     @classmethod
     def from_danjaresource(
             cls,
-            resource: "DANJAResource",
+            resource: Union["DANJATopLevel", "DANJAResource"],
     ) -> "DANJAResourceIdentifier":
         values = {
-            "type": resource.type,
-            "id": resource.id,
+            "type": resource.data.type,
+            "id": resource.data.id,
         }
 
         return DANJAResourceIdentifier(**values)
@@ -104,7 +103,7 @@ class DANJARelationship(BaseModel, ResourceResolver):
     @classmethod
     def from_danjaresource(
             cls,
-            resource: "DANJAResource",
+            resource: Union["DANJATopLevel", "DANJAResource"],
     ) -> "DANJARelationship":
         identifier = DANJAResourceIdentifier.from_danjaresource(resource)
         return DANJARelationship(data=identifier)
@@ -178,7 +177,7 @@ class DANJATopLevel(BaseModel, ResourceResolver, Generic[ResourceType]):
             values = {
                 "type": resource_name,
                 "lid": None,
-                "attributes": resource
+                "attributes": resource.model_dump(by_alias=True)
             }
 
             id_value = object.__getattribute__(resource, resource_id)
@@ -223,7 +222,7 @@ class DANJATopLevel(BaseModel, ResourceResolver, Generic[ResourceType]):
                     values = {
                         "type": resource_name,
                         "lid": None,
-                        "attributes": sub_resource
+                        "attributes": sub_resource.model_dump(by_alias=True)
                     }
                     id_value = object.__getattribute__(sub_resource, resource_id)
                     if id_value:
