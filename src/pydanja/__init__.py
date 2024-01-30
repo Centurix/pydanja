@@ -191,7 +191,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     "lid": None,
                     "attributes": sub_resource
                 }
-                id_value = object.__getattribute__(sub_resource, resource_id)
+                id_value = object.__getattribute__(sub_resource, resource_id or "")
                 if id_value:
                     values["id"] = str(id_value)
                 data.append(DANJASingleResource(**values))
