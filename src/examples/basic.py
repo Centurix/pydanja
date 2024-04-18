@@ -37,6 +37,7 @@ resource1 = DANJAResource.from_basemodel(TestType(
 resource1.links = {
     "self": DANJALink(href="http://localhost")
 }
+print("================ From a BaseModel with ID ================")
 print(json.dumps(resource1.model_json_schema(), indent=2))
 print(resource1.model_dump_json(indent=2))
 
@@ -50,6 +51,7 @@ resource2 = DANJAResource.from_basemodel(TestType(
     name="Stuff!",
     description="This is desc!"
 ))
+print("================ From a BaseModel without ID ================")
 print(json.dumps(resource2.model_json_schema(), indent=2))
 print(resource2.model_dump_json(indent=2))
 
@@ -60,9 +62,16 @@ resource3 = DANJAResourceList.from_basemodel_list([
     TestType(id=3, name="Three", description="Desc Three"),
     TestType(id=4, name="Four", description="Desc Four"),
 ])
+print("================ From a list of BaseModels ================")
 print(json.dumps(resource3.model_json_schema(), indent=2))
 print(resource3.model_dump_json(indent=2))
 
 # Fetch the original list of resource models via .resources
 originals = resource3.resources
 print(originals)
+
+# From an empty list
+resource4 = DANJAResourceList.from_basemodel_list([])
+print("================ From an empty list ================")
+print(json.dumps(resource4.model_json_schema(), indent=2))
+print(resource4.model_dump_json(indent=2))
