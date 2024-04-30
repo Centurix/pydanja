@@ -90,6 +90,9 @@ class ResourceResolver():
             if isinstance(field.json_schema_extra, dict):
                 if "resource_id" in field.json_schema_extra:
                     return field_name
+            elif isinstance(field.schema_extra, dict):  # Support for older SQLModel
+                if "resource_id" in field.json_schema_extra:
+                    return field_name
 
         return None
 
