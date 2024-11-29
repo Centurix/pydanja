@@ -6,10 +6,10 @@ authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
 ]
 dependencies = [
-    "pydantic>=2.1.1",
     "dpath>=2.1.6",
+    "pydantic>=2.10.2",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 readme = "README.md"
 license = {text = "MIT"}
 keywords = ["pydantic", "jsonapi", "json:api", "openapi", "fastapi"]
