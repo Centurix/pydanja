@@ -182,3 +182,4 @@ These can be run through PDM by using:
 * `pdm run lint`
 * `pdm run test`
 * `pdm run typecheck`
+* `pdm run all`

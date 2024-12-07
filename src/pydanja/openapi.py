@@ -1,8 +1,8 @@
-from typing import Dict, Any
+from typing import Any
 import dpath
 
 
-def danja_openapi(openapi_schema: Dict[str, Any]) -> Dict[str, Any]:
+def danja_openapi(openapi_schema: dict[str, Any]) -> dict[str, Any]:
     """
     This is an optional function that will assist in de-cluttering the OpenAPI
     schema space. This function will de-reference and flatten a lot of the

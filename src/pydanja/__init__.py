@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Generic, TypeVar, Optional, Dict, Any, List, Union
+from typing import Generic, TypeVar, Optional, Any, Union
 
 from .openapi import danja_openapi
 
@@ -24,7 +24,7 @@ class DANJALink(BaseModel):
     title: Optional[str] = None
     type: Optional[str] = None
     hreflang: Optional[str] = None
-    meta: Optional[Dict[str, Any]] = None
+    meta: Optional[dict[str, Any]] = None
 
 
 class DANJASource(BaseModel):
@@ -43,26 +43,26 @@ class DANJAResourceIdentifier(BaseModel):
 
 class DANJARelationship(BaseModel):
     """JSON:API Relationship"""
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
-    data: Optional[Dict[str, Union[DANJAResourceIdentifier, List[DANJAResourceIdentifier], None]]] = None  # noqa: E501
-    meta: Optional[Dict[str, Any]] = None
+    links: Optional[dict[str, Union[str, DANJALink, None]]] = None
+    data: Optional[dict[str, Union[DANJAResourceIdentifier, list[DANJAResourceIdentifier], None]]] = None  # noqa: E501
+    meta: Optional[dict[str, Any]] = None
 
 
 class DANJAError(BaseModel):
     """JSON:API Error object"""
     id: Optional[str] = None
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
+    links: Optional[dict[str, Union[str, DANJALink, None]]] = None
     status: Optional[str] = None
     code: Optional[str] = None
     title: Optional[str] = None
     detail: Optional[str] = None
-    source: Optional[Dict[str, DANJASource]] = None
-    meta: Optional[Dict[str, Any]] = None
+    source: Optional[dict[str, DANJASource]] = None
+    meta: Optional[dict[str, Any]] = None
 
 
 class DANJAErrorList(BaseModel):
     """JSON:API Error list"""
-    errors: List[DANJAError]
+    errors: list[DANJAError]
 
 
 class DANJASingleResource(BaseModel, Generic[ResourceType]):
@@ -71,9 +71,9 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
     type: str
     lid: Optional[str] = None
     attributes: ResourceType
-    relationships: Optional[Dict[str, DANJARelationship]] = None
-    links: Optional[Dict[str, Any]] = None
-    meta: Optional[Dict[str, Any]] = None
+    relationships: Optional[dict[str, DANJARelationship]] = None
+    links: Optional[dict[str, Any]] = None
+    meta: Optional[dict[str, Any]] = None
 
 
 class ResourceResolver():
@@ -100,9 +100,9 @@ class ResourceResolver():
 class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
     """JSON:API base for a single resource"""
     data: DANJASingleResource[ResourceType]
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
-    meta: Optional[Dict[str, Any]] = None
-    included: Optional[List[Dict[str, Any]]] = None
+    links: Optional[dict[str, Union[str, DANJALink, None]]] = None
+    meta: Optional[dict[str, Any]] = None
+    included: Optional[list[dict[str, Any]]] = None
 
     @property
     def resource(self) -> ResourceType:
@@ -151,19 +151,19 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
 
 class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
     """JSON:API base for a list of resources"""
-    data: List[DANJASingleResource[ResourceType]]
-    links: Optional[Dict[str, Union[str, DANJALink, None]]] = None
-    meta: Optional[Dict[str, Any]] = None
-    included: Optional[List[DANJASingleResource]] = None
+    data: list[DANJASingleResource[ResourceType]]
+    links: Optional[dict[str, Union[str, DANJALink, None]]] = None
+    meta: Optional[dict[str, Any]] = None
+    included: Optional[list[DANJASingleResource]] = None
 
     @property
-    def resources(self) -> List[ResourceType]:
+    def resources(self) -> list[ResourceType]:
         return [data.attributes for data in self.data]
 
     @classmethod
     def from_basemodel_list(
             cls,
-            resources: List[ResourceType],
+            resources: list[ResourceType],
             resource_name: Optional[str] = None,
             resource_id: Optional[str] = None
     ) -> "DANJAResourceList":
@@ -187,7 +187,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                     if not resource_id:
                         raise Exception(f"No fields defined in {resource_name}")
 
-            data: List[DANJASingleResource] = []
+            data: list[DANJASingleResource] = []
             for sub_resource in resources:
                 values = {
                     "type": resource_name,
