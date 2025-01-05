@@ -7,9 +7,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project: str = 'PyDANJA'
-copyright: str = '2023, Chris Read'
+copyright: str = '2025, Chris Read'
 author: str = 'Chris Read'
-release: str = '0.1.18'
+release: str = '0.1.20'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
