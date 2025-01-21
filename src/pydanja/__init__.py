@@ -87,7 +87,9 @@ class ResourceResolver():
     @classmethod
     def resolve_resource_id(cls, resource) -> Optional[str]:
         for field_name, field in resource.model_fields.items():
-            if hasattr(field, "primary_key") and field.primary_key:  # Latest SQLMode
+            if hasattr(field, "primary_key") and \
+                isinstance(field.primary_key, bool) and \
+                field.primary_key:  # Latest SQLMode
                 return field_name
             # Support for older SQLModel versions
             if hasattr(field, "json_schema_extra") and isinstance(field.json_schema_extra, dict):
