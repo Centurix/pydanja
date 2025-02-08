@@ -27,5 +27,6 @@ jobs:
       id: versioncheck
       with:
         pyproject-path: "./pyproject.toml"
-    - if: steps.versioncheck.outputs.local_version_is_higher
-      run: uv build && uv publish -t "$PYPI_TOKEN"
+    - name: Publish the pypi project
+      if: steps.versioncheck.outputs.local_version_is_higher == false
+      run: uv build && uv publish -t ${{ secrets.PYPI_TOKEN }}
