@@ -27,6 +27,11 @@ jobs:
       id: versioncheck
       with:
         pyproject-path: "./pyproject.toml"
+    - name: check output
+      run: |
+        echo "Output: ${{ steps.versioncheck.outputs.local_version_is_higher }}"  # 'true' or 'false
+        echo "Local version: ${{ steps.versioncheck.outputs.local_version }}"     # e.g., 0.1.1
+        echo "Public version: ${{ steps.versioncheck.outputs.public_version }}"   # e.g., 0.1.0
     - name: Publish the pypi project
       if: true == steps.versioncheck.outputs.local_version_is_higher
       run: uv build && uv publish -t ${{ secrets.PYPI_TOKEN }}
