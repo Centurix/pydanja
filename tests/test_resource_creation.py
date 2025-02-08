@@ -2,7 +2,7 @@ import pytest
 import json
 from typing import Optional
 from pathlib import Path
-from src.pydanja import DANJAResource, DANJAResourceList
+from pydanja import DANJAResource, DANJAResourceList
 from pydantic import BaseModel, Field
 
 
