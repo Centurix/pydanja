@@ -2,7 +2,7 @@
 ![pypi](https://img.shields.io/pypi/v/pydanja)
 ![licence](https://img.shields.io/github/license/Centurix/pydanja.svg)
 ![status](https://img.shields.io/pypi/status/pydanja)
-![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)
+![uv-managed](https://img.shields.io/badge/uv-managed-blueviolet)
 
 # PyDANJA
 
@@ -167,7 +167,7 @@ There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code
 
 ### Contributing
 
-This project uses [PDM](https://pdm.fming.dev/latest/) for dependency and virtual environment management.
+This project uses [uv](https://github.com/astral-sh/uv) for dependency and virtual environment management.
 
 It aims to use the lowest supported Python version (3.9 as of the writing of this document)
 
@@ -177,9 +177,9 @@ There are currently three build steps in the actions workflow:
 * Linting
 * Type checking
 
-These can be run through PDM by using:
+These can be run through `uv` by using:
 
-* `pdm run lint`
-* `pdm run test`
-* `pdm run typecheck`
-* `pdm run all`
+* `uv run ./lint`
+* `uv run ./test`
+* `uv run ./typecheck`
+* `uv run ./all`

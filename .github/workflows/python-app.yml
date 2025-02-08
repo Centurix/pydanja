@@ -1,10 +1,6 @@
 name: Library test, lint and typecheck
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+run-name: Test, lint and typecheck
+on: [push]
 
 permissions:
   contents: read
@@ -13,22 +9,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: "3.9"
-    - name: Install dependencies
-      run: |
-        curl -sSL https://pdm.fming.dev/install-pdm.py | python3 -
-        pdm install
+        python-version: 3.9
+    - run: uv sync
     - name: Lint with Ruff
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        pdm run lint
+      run: uv run ./lint
     - name: Test with pytest
-      run: |
-        pdm run test
+      run: uv run ./test
     - name: Typecheck with mypy
+      run: uv run ./typecheck
+    - name: Check project version
+      uses: maybe-hello-world/pyproject-check-version@v4
+      id: versioncheck
+      with:
+        pyproject-path: "./pyproject.toml"
+    - name: Check version
       run: |
-        pdm run typecheck
+          echo "Output: ${{ steps.versioncheck.outputs.local_version_is_higher }}"  # 'true' or 'false
+          echo "Local version: ${{ steps.versioncheck.outputs.local_version }}"     # e.g., 0.1.1
+          echo "Public version: ${{ steps.versioncheck.outputs.public_version }}"   # e.g., 0.1.0
