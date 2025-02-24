@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator, ModelWrapValidatorHandler, ValidationError
 from typing import Generic, TypeVar, Optional, Any, Union
-
+from typing_extensions import Self
+from copy import deepcopy
 from .openapi import danja_openapi
 
 __all__ = [
@@ -106,7 +107,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
     data: DANJASingleResource[ResourceType]
     links: Optional[dict[str, Union[str, DANJALink, None]]] = None
     meta: Optional[dict[str, Any]] = None
-    included: Optional[list[dict[str, Any]]] = None
+    included: Optional[list[DANJASingleResource]] = None
 
     @property
     def resource(self) -> ResourceType:
@@ -151,6 +152,35 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
+
+    def include_from_basemodels(
+            self,
+            includes: list[Any]
+    ) -> None:
+        """
+        Add the list to the includes
+        """
+        for include in includes:
+            # Convert these to resource types
+            self.included.append(DANJASingleResource(**include))
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def ignore_included(cls, data: Any, handler: ModelWrapValidatorHandler[Self]) -> Self:
+        """
+        Pydantic will attempt to validate any generic in a model against a single TypeVar[] resulting
+        in failures of validation for the `included` resource listing, which may not be the same
+        resource type as the top level data block. So in the meantime, we exclude `included` resources
+        from the validation process.
+        """
+        data_copy = deepcopy(data)
+
+        # Exclude included resource types
+        if hasattr(data_copy, "included"):
+            delattr(data_copy, "included")
+
+        handler(data_copy)
+        return data
 
 
 class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
@@ -208,3 +238,32 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
             )
+
+    def include_from_basemodels(
+            self,
+            includes: list[Any]
+    ) -> None:
+        """
+        Add the list to the includes
+        """
+        for include in includes:
+            # Convert these to resource types
+            self.included.append(DANJASingleResource(**include))
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def ignore_included(cls, data: Any, handler: ModelWrapValidatorHandler[Self]) -> Self:
+        """
+        Pydantic will attempt to validate any generic in a model against a single TypeVar[] resulting
+        in failures of validation for the `included` resource listing, which may not be the same
+        resource type as the top level data block. So in the meantime, we exclude `included` resources
+        from the validation process.
+        """
+        data_copy = deepcopy(data)
+
+        # Exclude included resource types
+        if hasattr(data_copy, "included"):
+            delattr(data_copy, "included")
+
+        handler(data_copy)
+        return data
