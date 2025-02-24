@@ -160,6 +160,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         """
         Add the list to the includes
         """
+        self.included = []
         for include in includes:
             # Convert these to resource types
             self.included.append(DANJASingleResource(**include))
@@ -246,6 +247,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         """
         Add the list to the includes
         """
+        self.included = []
         for include in includes:
             # Convert these to resource types
             self.included.append(DANJASingleResource(**include))
