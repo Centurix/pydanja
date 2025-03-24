@@ -80,10 +80,14 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
 class ResourceResolver():
     @classmethod
     def resolve_resource_name(cls, resource) -> str:
-        return str(resource.model_config.get(
-            "resource_name",
-            resource.__class__.__name__.lower()
-        ))
+        return str(
+        resource.model_config.get(
+            "resource_name",  # Previous method to ensure backwards compatability
+            resource.model_config.get("json_schema_extra", {}).get(  # New method which is mypy safe
+                "resource_name", resource.__class__.__name__.lower()
+            ),
+        )
+    )
 
     @classmethod
     def resolve_resource_id(cls, resource) -> Optional[str]:
