@@ -1,0 +1,337 @@
+{
+    "$defs": {
+        "DANJALink": {
+            "description": "JSON:API Link",
+            "properties": {
+                "href": {
+                    "title": "Href",
+                    "type": "string"
+                },
+                "rel": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Rel"
+                },
+                "describedby": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Describedby"
+                },
+                "title": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Title"
+                },
+                "type": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Type"
+                },
+                "hreflang": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Hreflang"
+                },
+                "meta": {
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Meta"
+                }
+            },
+            "required": [
+                "href"
+            ],
+            "title": "DANJALink",
+            "type": "object"
+        },
+        "DANJARelationship": {
+            "description": "JSON:API Relationship",
+            "properties": {
+                "links": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "$ref": "#/$defs/DANJALink"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Links"
+                },
+                "data": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/$defs/DANJAResourceIdentifier"
+                                    },
+                                    {
+                                        "items": {
+                                            "$ref": "#/$defs/DANJAResourceIdentifier"
+                                        },
+                                        "type": "array"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Data"
+                },
+                "meta": {
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Meta"
+                }
+            },
+            "title": "DANJARelationship",
+            "type": "object"
+        },
+        "DANJAResourceIdentifier": {
+            "description": "JSON:API Resource Identifier",
+            "properties": {
+                "type": {
+                    "title": "Type",
+                    "type": "string"
+                },
+                "id": {
+                    "title": "Id",
+                    "type": "string"
+                },
+                "lid": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Lid"
+                }
+            },
+            "required": [
+                "type",
+                "id"
+            ],
+            "title": "DANJAResourceIdentifier",
+            "type": "object"
+        },
+        "DANJASingleResource": {
+            "description": "A single resource. The only JSON:API required field is type",
+            "properties": {
+                "id": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Id"
+                },
+                "type": {
+                    "title": "Type",
+                    "type": "string"
+                },
+                "lid": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Lid"
+                },
+                "attributes": {
+                    "title": "Attributes"
+                },
+                "relationships": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": {
+                                "$ref": "#/$defs/DANJARelationship"
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Relationships"
+                },
+                "links": {
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Links"
+                },
+                "meta": {
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Meta"
+                }
+            },
+            "required": [
+                "type",
+                "attributes"
+            ],
+            "title": "DANJASingleResource",
+            "type": "object"
+        }
+    },
+    "description": "JSON:API base for a single resource with included",
+    "properties": {
+        "data": {
+            "$ref": "#/$defs/DANJASingleResource"
+        },
+        "links": {
+            "anyOf": [
+                {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "$ref": "#/$defs/DANJALink"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "type": "object"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "title": "Links"
+        },
+        "meta": {
+            "anyOf": [
+                {
+                    "type": "object"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "title": "Meta"
+        },
+        "included": {
+            "anyOf": [
+                {
+                    "items": {
+                        "$ref": "#/$defs/DANJASingleResource"
+                    },
+                    "type": "array"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "title": "Included"
+        }
+    },
+    "required": [
+        "data"
+    ],
+    "title": "DANJAResource",
+    "type": "object"
+}

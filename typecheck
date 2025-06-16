@@ -1,2 +1,2 @@
 #!/bin/bash
-mypy src
+ty check src

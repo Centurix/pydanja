@@ -77,6 +77,32 @@ def test_it_creates_a_container_from_base_model_without_id(resource):
     assert(new_resource.resource == basemodel_instance)
 
 
+@pytest.mark.parametrize("resource", ["single_resource_with_includes.json"], indirect=True)
+def test_it_creates_a_container_from_base_model_with_included(resource):
+    """
+    Test we can create a JSON:API container with an includes block
+    from a pydantic BaseModel instance
+    """
+    # BaseModel including ID
+    basemodel_instance = FixtureTestType(
+        id=1,
+        name="Stuff!",
+        description="This is desc!"
+    )
+
+    # Create the JSON:API container
+    new_resource = DANJAResource.from_basemodel(basemodel_instance)
+    new_resource.include_from_basemodels(basemodel_instance)
+
+    schema = new_resource.model_json_schema()
+
+    # Check schema
+    assert(schema == resource)
+
+    # Check resource data
+    assert(new_resource.resource == basemodel_instance)
+
+
 @pytest.mark.parametrize("resource", ["multiple_resource_with_id.json"], indirect=True)
 def test_it_creates_a_container_list_from_base_model_with_id(resource):
     """

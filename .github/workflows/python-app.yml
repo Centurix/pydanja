@@ -20,8 +20,8 @@ jobs:
       run: uv run ./lint
     - name: Test with pytest
       run: uv run ./test
-    - name: Typecheck with mypy
-      run: uv run ./typecheck
+    - name: Typecheck with ty
+      run: uv run ty check
     - name: Check project version
       uses: maybe-hello-world/pyproject-check-version@v4
       id: versioncheck

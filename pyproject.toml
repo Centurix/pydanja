@@ -33,10 +33,6 @@ homepage = "https://github.com/Centurix/pydanja"
 repository = "https://github.com/Centurix/pydanja"
 documentation = "https://pydanja.readthedocs.io/en/latest/"
 
-[tool.mypy]
-plugins = "pydantic.mypy"
-exclude = "examples"
-
 [tool.ruff]
 line-length = 119
 
@@ -46,7 +42,7 @@ license-files = []
 [dependency-groups]
 dev = [
     "pytest>=7.4.0",
-    "mypy>=1.5.0",
     "sphinx>=7.1.2",
     "ruff>=0.8.1",
+    "ty>=0.0.1a10",
 ]

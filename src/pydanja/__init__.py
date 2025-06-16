@@ -1,4 +1,4 @@
-from pydantic import BaseModel, model_validator, ModelWrapValidatorHandler
+from pydantic import BaseModel, model_validator, ModelWrapValidatorHandler, ValidationError
 from typing import Generic, TypeVar, Optional, Any, Union
 from typing_extensions import Self
 from copy import deepcopy
@@ -80,14 +80,17 @@ class DANJASingleResource(BaseModel, Generic[ResourceType]):
 class ResourceResolver():
     @classmethod
     def resolve_resource_name(cls, resource) -> str:
-        return str(
-        resource.model_config.get(
-            "resource_name",  # Previous method to ensure backwards compatability
-            resource.model_config.get("json_schema_extra", {}).get(  # New method which is mypy safe
-                "resource_name", resource.__class__.__name__.lower()
-            ),
-        )
-    )
+        try:
+            return str(
+                resource.model_config.get(  # <-- model_config does not exist on dict
+                    "resource_name",  # Previous method to ensure backwards compatability
+                    resource.model_config.get("json_schema_extra", {}).get(  # New method which is ty safe
+                        "resource_name", resource.__class__.__name__.lower()
+                    ),
+                )
+            )
+        except Exception as ex:
+            print(ex)
 
     @classmethod
     def resolve_resource_id(cls, resource) -> Optional[str]:
@@ -184,8 +187,15 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         if hasattr(data_copy, "included"):
             delattr(data_copy, "included")
 
-        handler(data_copy)
-        return data
+        try:
+            # Validate without the included blocks
+            test = handler(data_copy)
+        except ValidationError:
+            pass
+
+        # Return the data with the included blocks
+        test = cls.from_basemodel(data)
+        return test
 
 
 class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
