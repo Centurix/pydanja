@@ -23,7 +23,7 @@ This library makes use of BaseModel generics to contain either a single resource
 
 ## Requirements
 
-This will support the oldest non-EOL Python (3.9 as of the writing of this document)
+This will support the oldest non-EOL Python (3.10 as of the writing of this document)
 
 ## Usage
 
@@ -169,7 +169,7 @@ There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code
 
 This project uses [uv](https://github.com/astral-sh/uv) for dependency and virtual environment management.
 
-It aims to use the lowest supported Python version (3.9 as of the writing of this document)
+It aims to use the lowest supported Python version (3.10 as of the writing of this document)
 
 There are currently three build steps in the actions workflow:
 
