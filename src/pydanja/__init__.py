@@ -168,8 +168,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            return cls(data=DANJASingleResource(**values))  # ty: ignore
-            self.included.append(DANJASingleResource(**include))
+            self.included.append(DANJASingleResource(**include))  # ty: ignore
 
     @model_validator(mode="wrap")
     @classmethod
@@ -238,7 +237,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                 id_value = object.__getattribute__(sub_resource, resource_id or "")
                 if id_value:
                     values["id"] = str(id_value)
-            return cls(data=DANJASingleResource(**values))  # ty: ignore
+                data.append(DANJASingleResource(**values))  # ty: ignore
 
             return cls(data=data)
         except AttributeError:
@@ -256,7 +255,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            return cls(data=DANJASingleResource(**values))  # ty: ignore
+            self.included.append(DANJASingleResource(**include))  # ty: ignore
 
     @model_validator(mode="wrap")
     @classmethod

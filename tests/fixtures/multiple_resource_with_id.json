@@ -70,6 +70,7 @@
                 "meta": {
                     "anyOf": [
                         {
+                            "additionalProperties": true,
                             "type": "object"
                         },
                         {
@@ -145,6 +146,7 @@
                 "meta": {
                     "anyOf": [
                         {
+                            "additionalProperties": true,
                             "type": "object"
                         },
                         {
@@ -241,6 +243,7 @@
                 "links": {
                     "anyOf": [
                         {
+                            "additionalProperties": true,
                             "type": "object"
                         },
                         {
@@ -253,6 +256,7 @@
                 "meta": {
                     "anyOf": [
                         {
+                            "additionalProperties": true,
                             "type": "object"
                         },
                         {
@@ -308,6 +312,7 @@
         "meta": {
             "anyOf": [
                 {
+                    "additionalProperties": true,
                     "type": "object"
                 },
                 {
