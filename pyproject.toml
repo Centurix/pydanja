@@ -1,6 +1,6 @@
 [project]
 name = "pydanja"
-version = "0.1.26"
+version = "0.1.30"
 description = "JSON:API Support for Pydantic"
 authors = [
     {name = "Chris Read",email = "centurix@gmail.com"},
@@ -9,7 +9,7 @@ dependencies = [
     "dpath>=2.1.6",
     "pydantic>=2.10.2",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
 keywords = ["pydantic", "jsonapi", "json:api", "openapi", "fastapi"]
@@ -33,9 +33,8 @@ homepage = "https://github.com/Centurix/pydanja"
 repository = "https://github.com/Centurix/pydanja"
 documentation = "https://pydanja.readthedocs.io/en/latest/"
 
-[tool.mypy]
-plugins = "pydantic.mypy"
-exclude = "examples"
+[tool.ty.src]
+exclude = ["src/examples", "tests"]
 
 [tool.ruff]
 line-length = 119
@@ -46,7 +45,6 @@ license-files = []
 [dependency-groups]
 dev = [
     "pytest>=7.4.0",
-    "mypy>=1.5.0",
     "sphinx>=7.1.2",
     "ruff>=0.8.1",
 ]

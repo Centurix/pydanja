@@ -1,2 +1,2 @@
 #!/bin/bash
-mypy src
+uvx ty check .

@@ -1,4 +1,5 @@
-from pydantic import BaseModel, model_validator, ModelWrapValidatorHandler
+from pydantic import BaseModel, model_validator
+from pydantic.functional_validators import ModelWrapValidatorHandler
 from typing import Generic, TypeVar, Optional, Any, Union
 from typing_extensions import Self
 from copy import deepcopy
@@ -83,7 +84,7 @@ class ResourceResolver():
         return str(
         resource.model_config.get(
             "resource_name",  # Previous method to ensure backwards compatability
-            resource.model_config.get("json_schema_extra", {}).get(  # New method which is mypy safe
+            resource.model_config.get("json_schema_extra", {}).get(  # New method which is type safe
                 "resource_name", resource.__class__.__name__.lower()
             ),
         )
@@ -151,7 +152,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
             if id_value:
                 values["id"] = str(id_value)
 
-            return cls(data=DANJASingleResource(**values))
+            return cls(data=DANJASingleResource(**values))  # ty: ignore
         except AttributeError:
             raise Exception(
                 f"Resource ID field not found in {resource_name}: {resource_id}"
@@ -167,6 +168,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
+            return cls(data=DANJASingleResource(**values))  # ty: ignore
             self.included.append(DANJASingleResource(**include))
 
     @model_validator(mode="wrap")
@@ -236,7 +238,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
                 id_value = object.__getattribute__(sub_resource, resource_id or "")
                 if id_value:
                     values["id"] = str(id_value)
-                data.append(DANJASingleResource(**values))
+            return cls(data=DANJASingleResource(**values))  # ty: ignore
 
             return cls(data=data)
         except AttributeError:
@@ -254,7 +256,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            self.included.append(DANJASingleResource(**include))
+            return cls(data=DANJASingleResource(**values))  # ty: ignore
 
     @model_validator(mode="wrap")
     @classmethod
