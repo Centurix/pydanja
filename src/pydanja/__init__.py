@@ -1,6 +1,6 @@
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
-from typing import Generic, TypeVar, Optional, Any, Union
+from typing import Any, Generic, Optional, TypeVar, Union
 from typing_extensions import Self
 from copy import deepcopy
 from .openapi import danja_openapi
@@ -31,9 +31,12 @@ class DANJALink(BaseModel):
 
 class DANJASource(BaseModel):
     """JSON:API Source"""
-    pointer: str
-    parameter: str
-    header: str
+
+    model_config = ConfigDict(extra="forbid")
+
+    pointer: Optional[str] = None
+    parameter: Optional[str] = None
+    header: Optional[str] = None
 
 
 class DANJAResourceIdentifier(BaseModel):
@@ -52,13 +55,16 @@ class DANJARelationship(BaseModel):
 
 class DANJAError(BaseModel):
     """JSON:API Error object"""
+
+    model_config = ConfigDict(extra="forbid")
+
     id: Optional[str] = None
     links: Optional[dict[str, Union[str, DANJALink, None]]] = None
     status: Optional[str] = None
     code: Optional[str] = None
     title: Optional[str] = None
     detail: Optional[str] = None
-    source: Optional[dict[str, DANJASource]] = None
+    source: Optional[DANJASource] = None
     meta: Optional[dict[str, Any]] = None
 
 
