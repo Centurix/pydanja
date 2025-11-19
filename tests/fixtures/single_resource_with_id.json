@@ -172,19 +172,6 @@
                     ],
                     "default": null,
                     "title": "Lid"
-                },
-                "meta": {
-                    "anyOf": [
-                        {
-                            "additionalProperties": true,
-                            "type": "object"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "title": "Meta"
                 }
             },
             "required": [
