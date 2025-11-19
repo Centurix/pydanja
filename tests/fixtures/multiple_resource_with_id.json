@@ -118,23 +118,13 @@
                 "data": {
                     "anyOf": [
                         {
-                            "additionalProperties": {
-                                "anyOf": [
-                                    {
-                                        "$ref": "#/$defs/DANJAResourceIdentifier"
-                                    },
-                                    {
-                                        "items": {
-                                            "$ref": "#/$defs/DANJAResourceIdentifier"
-                                        },
-                                        "type": "array"
-                                    },
-                                    {
-                                        "type": "null"
-                                    }
-                                ]
+                            "$ref": "#/$defs/DANJAResourceIdentifier"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/$defs/DANJAResourceIdentifier"
                             },
-                            "type": "object"
+                            "type": "array"
                         },
                         {
                             "type": "null"
@@ -182,6 +172,19 @@
                     ],
                     "default": null,
                     "title": "Lid"
+                },
+                "meta": {
+                    "anyOf": [
+                        {
+                            "additionalProperties": true,
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Meta"
                 }
             },
             "required": [
