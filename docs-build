@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+uv sync --extra docs
+mkdocs build --strict "$@"

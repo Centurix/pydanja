@@ -4,6 +4,8 @@
 ![status](https://img.shields.io/pypi/status/pydanja)
 ![uv-managed](https://img.shields.io/badge/uv-managed-blueviolet)
 
+**Documentation:** [pydanja.readthedocs.io](https://pydanja.readthedocs.io/en/latest/)
+
 # PyDANJA
 
 **PyDAN**<sub>tic</sub> **J**<sub>SON</sub>**A**<sub>PI</sub>
@@ -239,3 +241,9 @@ These can be run through `uv` by using:
 * `uv run ./test`
 * `uv run ./typecheck`
 * `uv run ./all`
+
+Documentation site (MkDocs Material) — install extras and preview locally:
+
+* `uv sync --extra docs`
+* `uv run mkdocs serve`
+* `uv run ./docs-build` (static output in `site/`)

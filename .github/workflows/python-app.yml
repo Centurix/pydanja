@@ -15,13 +15,15 @@ jobs:
       uses: astral-sh/setup-uv@v6
       with:
         python-version: "3.10"
-    - run: uv sync
+    - run: uv sync --extra docs
     - name: Lint with Ruff
       run: uv run ./lint
     - name: Test with pytest
       run: uv run ./test
     - name: Typecheck with ty
       run: uv run ./typecheck
+    - name: Build docs (MkDocs)
+      run: uv run ./docs-build
     - name: Check project version
       uses: maybe-hello-world/pyproject-check-version@v4
       id: versioncheck

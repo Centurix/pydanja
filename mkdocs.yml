@@ -1,0 +1,62 @@
+# MkDocs Material — https://squidfunk.github.io/mkdocs-material/
+site_name: PyDANJA
+site_description: JSON:API support for Pydantic
+site_url: https://pydanja.readthedocs.io/
+docs_dir: docs/mkdocs
+
+repo_url: https://github.com/Centurix/pydanja
+repo_name: Centurix/pydanja
+edit_uri: edit/master/docs/mkdocs/
+
+strict: true
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            members_order: source
+            show_root_heading: true
+            show_symbol_type_heading: true
+            show_signature_annotations: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - API reference: api-reference.md
+  - FastAPI: fastapi.md
+  - Contributing: contributing.md
