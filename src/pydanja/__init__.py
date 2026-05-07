@@ -18,9 +18,10 @@ __all__ = [
 ]
 
 ResourceType = TypeVar("ResourceType")
+ModelType = TypeVar("ModelType", bound=BaseModel)
 
 
-def _validate_ignoring_included(data: Any, handler: ModelWrapValidatorHandler[Self]) -> Self:
+def _validate_ignoring_included(data: Any, handler: ModelWrapValidatorHandler[ModelType]) -> ModelType:
     """
     Validate a resource container while bypassing validation for `included`.
     """
@@ -38,7 +39,7 @@ def _validate_ignoring_included(data: Any, handler: ModelWrapValidatorHandler[Se
     validated = handler(data_copy)
 
     if included is not None:
-        validated.included = included
+        setattr(validated, "included", included)
 
     return validated
 
@@ -193,7 +194,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            self.included.append(DANJASingleResource(**include))  # ty: ignore
+            self.included.append(DANJASingleResource(**include))
 
     @model_validator(mode="wrap")
     @classmethod
@@ -262,7 +263,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            self.included.append(DANJASingleResource(**include))  # ty: ignore
+            self.included.append(DANJASingleResource(**include))
 
     @model_validator(mode="wrap")
     @classmethod
