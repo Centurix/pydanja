@@ -28,6 +28,12 @@ classifiers = [
     "Topic :: Software Development :: Libraries"
 ]
 
+[project.optional-dependencies]
+docs = [
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.26.0",
+]
+
 [project.urls]
 homepage = "https://github.com/Centurix/pydanja"
 repository = "https://github.com/Centurix/pydanja"
