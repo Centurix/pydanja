@@ -9,9 +9,9 @@
 **PyDAN**<sub>tic</sub> **J**<sub>SON</sub>**A**<sub>PI</sub>
 
 
-[JSON:API (or JSONAPI)](https://jsonapi.org/format/) Suport for [Pydantic](https://docs.pydantic.dev/latest/)
+[JSON:API (or JSONAPI)](https://jsonapi.org/format/) support for [Pydantic](https://docs.pydantic.dev/latest/)
 
-Output [JSONAPI](https://jsonapi.org/format/) from your [FastAPI](https://fastapi.tiangolo.com/) or [PyDantic](https://docs.pydantic.dev/latest/) based application with very little code.
+Output [JSONAPI](https://jsonapi.org/format/) from your [FastAPI](https://fastapi.tiangolo.com/) or [Pydantic](https://docs.pydantic.dev/latest/) based application with very little code.
 
 This is a series of classes that can be included into your [Pydantic](https://docs.pydantic.dev/latest/) project that act as a container format for outputting and verifying [JSON:API](https://jsonapi.org/format/) compliant content.
 
@@ -25,11 +25,44 @@ This library makes use of BaseModel generics to contain either a single resource
 
 This will support the oldest non-EOL Python (3.10 as of the writing of this document)
 
+## Quickstart
+
+Import the core types and build JSON:API responses from your Pydantic models.
+
+```python
+from pydantic import BaseModel, Field
+from pydanja import DANJAResource, DANJAResourceList
+```
+
+## API Reference
+
+### Primary containers
+
+- `DANJAResource[T]` - single-resource JSON:API document (`data` is one resource)
+- `DANJAResourceList[T]` - collection JSON:API document (`data` is a list of resources)
+- `DANJASingleResource[T]` - internal resource object used in `data`/`included`
+- `DANJAError` and `DANJAErrorList` - JSON:API error payloads
+- `DANJALink`, `DANJARelationship`, `DANJAResourceIdentifier`, `DANJASource` - JSON:API support types
+
+### Helper methods
+
+- `DANJAResource.from_basemodel(resource, resource_name=None, resource_id=None)`
+  - wraps a `BaseModel` as JSON:API
+  - auto-resolves resource type and id field when not provided
+- `DANJAResourceList.from_basemodel_list(resources, resource_name=None, resource_id=None)`
+  - wraps a list of `BaseModel` instances as JSON:API
+- `include_from_basemodels(includes)`
+  - attaches related resources in `included`
+- `resource` and `resources` properties
+  - return the original wrapped model(s)
+- `danja_openapi(schema)`
+  - rewrites generated OpenAPI schema names to cleaner JSON:API model names
+
 ## Usage
 
 With pydantic
 
-```
+```python
 from pydanja import DANJAResource
 
 
@@ -60,7 +93,7 @@ resource = resource_container.resource
 
 This basic example shows a [Pydantic](https://docs.pydantic.dev/latest/) BaseModel being contained within a `DANJAResource` object. The `model_dump_json` will output [JSON:API](https://jsonapi.org/format/):
 
-```
+```json
 {
   "data": {
     "id": "1",
@@ -83,9 +116,39 @@ This basic example shows a [Pydantic](https://docs.pydantic.dev/latest/) BaseMod
 
 Note that all [JSON:API](https://jsonapi.org/format/) fields are included in the output of the model dump. If you are using an API framework like [FastAPI](https://fastapi.tiangolo.com/), you use the `response_model_exclude_none` to suppress fields with no values.
 
+### Pydantic v2 notes
+
+`DANJAResource` and `DANJAResourceList` use wrap validators internally. On current releases this is compatible with Pydantic v2 validation semantics (the validators return the validated model instance), so you should not see the warning:
+
+`A custom validator is returning a value other than self`
+
+`included` resources are intentionally excluded from generic type validation so a response can include related resource types that differ from the top-level `data` resource type.
+
+### More examples
+
+Use an explicit resource type/id field (if auto detection is not desired):
+
+```python
+resource = DANJAResource.from_basemodel(
+    my_model,
+    resource_name="articles",
+    resource_id="article_id",
+)
+```
+
+Add `included` resources:
+
+```python
+response = DANJAResource.from_basemodel(article)
+response.include_from_basemodels([
+    {"type": "people", "id": "1", "attributes": {"name": "Ada"}},
+    {"type": "comments", "id": "99", "attributes": {"body": "Nice post"}},
+])
+```
+
 ### FastAPI example
 
-```
+```python
 from typing import Optional, Union
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi import FastAPI
@@ -155,14 +218,7 @@ async def test_get() -> Union[DANJAResourceList[TestType], DANJAError]:
     return DANJAResourceList.from_basemodel_list(values)
 ```
 
-This library supports:
-
-* Single resources (`DANJAResource`)
-* Lists of resources (`DANJAResourceList`)
-* Error objects (`DANJAErrorList`/`DANJAError`)
-* Link objects (`DANJALink`)
-
-There are more examples, including [FastAPI](https://fastapi.tiangolo.com/) code in the `src/examples` directory.
+There are more runnable examples, including [FastAPI](https://fastapi.tiangolo.com/) usage, in `src/examples`.
 
 
 ### Contributing
