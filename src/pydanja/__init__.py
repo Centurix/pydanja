@@ -18,6 +18,30 @@ __all__ = [
 ]
 
 ResourceType = TypeVar("ResourceType")
+ModelType = TypeVar("ModelType", bound=BaseModel)
+
+
+def _validate_ignoring_included(data: Any, handler: ModelWrapValidatorHandler[ModelType]) -> ModelType:
+    """
+    Validate a resource container while bypassing validation for `included`.
+    """
+    data_copy = deepcopy(data)
+    included = None
+
+    # dict payloads (e.g. DANJAResource(...))
+    if isinstance(data_copy, dict):
+        included = data_copy.pop("included", None)
+    # model payloads (e.g. DANJAResource.model_validate(existing_model))
+    elif hasattr(data_copy, "included"):
+        included = getattr(data_copy, "included")
+        delattr(data_copy, "included")
+
+    validated = handler(data_copy)
+
+    if included is not None:
+        setattr(validated, "included", included)
+
+    return validated
 
 
 class DANJALink(BaseModel):
@@ -105,7 +129,7 @@ class ResourceResolver:
 
     @classmethod
     def resolve_resource_id(cls, resource) -> Optional[str]:
-        for field_name, field in resource.model_fields.items():
+        for field_name, field in resource.__class__.model_fields.items():
             if (
                 hasattr(field, "primary_key") and isinstance(field.primary_key, bool) and field.primary_key
             ):  # Latest SQLMode
@@ -170,7 +194,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            self.included.append(DANJASingleResource(**include))  # ty: ignore
+            self.included.append(DANJASingleResource(**include))
 
     @model_validator(mode="wrap")
     @classmethod
@@ -181,14 +205,7 @@ class DANJAResource(BaseModel, ResourceResolver, Generic[ResourceType]):
         resource type as the top level data block. So in the meantime, we exclude `included` resources
         from the validation process.
         """
-        data_copy = deepcopy(data)
-
-        # Exclude included resource types
-        if hasattr(data_copy, "included"):
-            delattr(data_copy, "included")
-
-        handler(data_copy)
-        return data
+        return _validate_ignoring_included(data, handler)
 
 
 class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
@@ -246,7 +263,7 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         self.included = []
         for include in includes:
             # Convert these to resource types
-            self.included.append(DANJASingleResource(**include))  # ty: ignore
+            self.included.append(DANJASingleResource(**include))
 
     @model_validator(mode="wrap")
     @classmethod
@@ -257,11 +274,4 @@ class DANJAResourceList(BaseModel, ResourceResolver, Generic[ResourceType]):
         resource type as the top level data block. So in the meantime, we exclude `included` resources
         from the validation process.
         """
-        data_copy = deepcopy(data)
-
-        # Exclude included resource types
-        if hasattr(data_copy, "included"):
-            delattr(data_copy, "included")
-
-        handler(data_copy)
-        return data
+        return _validate_ignoring_included(data, handler)

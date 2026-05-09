@@ -1,5 +1,6 @@
 import pytest
 import json
+import warnings
 from typing import Optional
 from pathlib import Path
 from src.pydanja import DANJAResource, DANJAResourceList
@@ -137,3 +138,58 @@ def test_it_creates_a_container_list_from_base_model_without_id(resource):
 
     # Check resource data
     assert(len(new_resources.resources) == len(basemodel_instances))
+
+
+def test_it_does_not_warn_for_single_resource_with_included():
+    payload = {
+        "data": {
+            "id": "1",
+            "type": "fixturetesttype",
+            "attributes": {"id": 1, "name": "Stuff!", "description": "This is desc!"},
+        },
+        "included": [
+            {
+                "id": "200",
+                "type": "other",
+                "attributes": {"name": "Included model"},
+            }
+        ],
+    }
+
+    with warnings.catch_warnings(record=True) as warning_records:
+        warnings.simplefilter("always")
+        resource = DANJAResource[FixtureTestType](**payload)
+
+    assert resource.included == payload["included"]
+    assert not any("Returning anything other than `self`" in str(w.message) for w in warning_records)
+
+
+def test_it_does_not_warn_for_resource_list_with_included():
+    payload = {
+        "data": [
+            {
+                "id": "1",
+                "type": "fixturetesttype",
+                "attributes": {"id": 1, "name": "Stuff!", "description": "This is desc!"},
+            },
+            {
+                "id": "2",
+                "type": "fixturetesttype",
+                "attributes": {"id": 2, "name": "More Stuff!", "description": "This is more desc!"},
+            },
+        ],
+        "included": [
+            {
+                "id": "200",
+                "type": "other",
+                "attributes": {"name": "Included model"},
+            }
+        ],
+    }
+
+    with warnings.catch_warnings(record=True) as warning_records:
+        warnings.simplefilter("always")
+        resource_list = DANJAResourceList[FixtureTestType](**payload)
+
+    assert resource_list.included == payload["included"]
+    assert not any("Returning anything other than `self`" in str(w.message) for w in warning_records)
